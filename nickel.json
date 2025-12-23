@@ -1,0 +1,15 @@
+{
+  "UniqueName": "Kelsey.Carter",
+  "Version": "0.1.2",
+  "Author": "Kelsey",
+  "Description": "Adds a new character",
+  "RequiredApiVersion": "1.5.7",
+  "EntryPointAssembly": "Carter.dll",
+  "LoadPhase": "AfterDbInit",
+  "Dependencies": [
+    {
+      "UniqueName": "Shockah.Kokoro",
+      "Version": "1.12.1"
+    }
+  ]
+}

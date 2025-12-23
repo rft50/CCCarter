@@ -1,0 +1,85 @@
+﻿{
+  "character": {
+    "name": "Carter",
+    "desc": "<c=00ffff>CARTER</c>\nA magician who performs card tricks. Specializes in drawing cards and deck control."
+  },
+  "status": {
+    "stack": {
+      "name": "Stack",
+      "desc": "The next {0} times you play a card that doesn’t <c=cardtrait>exhaust</c>, put it on top of your <c=keyword>draw pile</c>."
+    }
+  },
+  "card": {
+    "ShuffleStep": {
+      "name": "Shuffle Step"
+    },
+    "SwitchShot": {
+      "name": "Switch Shot"
+    },
+    "CardSharp": {
+      "name": "Card Sharp"
+    },
+    "CardVanish": {
+      "name": "Card Vanish"
+    },
+    "Glide": {
+      "name": "Glide"
+    },
+    "RazzleDazzle": {
+      "name": "Razzle Dazzle",
+      "desc": "Attack for {{cur}}. On draw, add {{drw}}. On play reduce to {{bse}}.",
+      "descA": "Attack for {{cur}}. On draw, add {{drw}}."
+    },
+    "Roundabout": {
+      "name": "Roundabout"
+    },
+    "Stack": {
+      "name": "Stack"
+    },
+    "TrickDraw": {
+      "name": "Trick Draw"
+    },
+    "Cantrip": {
+      "name": "Cantrip"
+    },
+    "Flourish": {
+      "name": "Flourish"
+    },
+    "GlitzAndGlam": {
+      "name": "Glitz and Glam",
+      "desc": "Attack for {{cur}}. Gain {{cur}} shield. On draw, add {{drw}}. On play reduce to {{bse}}.",
+      "descB": "Attack for {{cur}}. Gain {{cur}} shield. On draw, add {{drw}}. On play reduce by 1."
+    },
+    "Showstopper": {
+      "name": "Grandstand"
+    },
+    "Spread": {
+      "name": "Spread"
+    },
+    "SleightOfHand": {
+      "name": "Sleight of Hand"
+    }
+  },
+  "artifact": {
+  },
+  "action": {
+    "ACardSwap": {
+      "name": "Card Swap",
+      "desc": "Choose a card in {{src}} and a card in {{dest}}. Swap their positions.\n(If one pile is empty, the chosen card will still move)"
+    },
+    "ACardCost": {
+      "name": "Card Cost",
+      "desc": "Choose {{cnt}} cards in your hand to {{mode}} to trigger this effect."
+    },
+    "ADiscardCard": {
+      "name": "Discard Card",
+      "desc": "Discard the selected card."
+    }
+  },
+  "traits": {
+    "lighten": {
+      "name": "Lighten",
+      "desc": "This card costs 1 less after you play it."
+    }
+  }
+}
