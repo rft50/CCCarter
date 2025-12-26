@@ -42,8 +42,14 @@ public class ACardSwapFinal : CardAction
                 break;
             case CardBrowse.Source.Hand:
                 c.hand[c.hand.IndexOf(cardFromPlace)] = cardToPlace;
+                cardToPlace.OnDraw(s, c);
+                foreach (var enumerateAllArtifact in s.EnumerateAllArtifacts())
+                    enumerateAllArtifact.OnDrawCard(s, c, 1);
                 break;
             case CardBrowse.Source.DiscardPile:
+                cardToPlace.OnDiscard(s, c);
+                c.SendCardToDiscard(s, cardToPlace);
+                c.discard.Remove(cardToPlace);
                 c.discard[c.discard.IndexOf(cardFromPlace)] = cardToPlace;
                 break;
         }
@@ -59,9 +65,13 @@ public class ACardSwapFinal : CardAction
                 break;
             case CardBrowse.Source.Hand:
                 c.hand.Add(cardToPlace);
+                cardToPlace.OnDraw(s, c);
+                foreach (var enumerateAllArtifact in s.EnumerateAllArtifacts())
+                    enumerateAllArtifact.OnDrawCard(s, c, 1);
                 break;
             case CardBrowse.Source.DiscardPile:
-                c.discard.Add(cardToPlace);
+                cardToPlace.OnDiscard(s, c);
+                c.SendCardToDiscard(s, cardToPlace);
                 break;
         }
     }

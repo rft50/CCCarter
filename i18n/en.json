@@ -59,8 +59,8 @@
     },
     "GlitzAndGlam": {
       "name": "Glitz and Glam",
-      "desc": "Attack for <c=boldPink>{{cur}}</c>. Gain {{cur}} shield. On draw, add {{drw}}. On play reduce to {{bse}}.",
-      "descB": "Attack for <c=boldPink>{{cur}}</c>. Gain {{cur}} shield. On draw, add {{drw}}. On play reduce by 1."
+      "desc": "Attack for <c=boldPink>{{cur}}</c>. Gain <c=boldPink>{{cur}}</c> shield. On draw, add {{drw}}. On play, reduce to {{bse}}.",
+      "descB": "Attack for <c=boldPink>{{cur}}</c>. Gain <c=boldPink>{{cur}}</c> shield. On draw, add {{drw}}. On play, reduce by 1."
     },
     "Grandstand": {
       "name": "Grandstand"

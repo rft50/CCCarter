@@ -11,7 +11,7 @@ namespace Carter.Cards;
 public class GlitzAndGlam : Card, IRegisterable
 {
 
-    public int? value = null; // cause can't access upgrade at init, and cause B can reduce it to negatives if played without being explicitly drawn
+    public int value = 0;
     public static void Register(IPluginPackage<IModManifest> package, IModHelper helper)
     {
         helper.Content.Cards.RegisterCard(new CardConfiguration
@@ -20,7 +20,7 @@ public class GlitzAndGlam : Card, IRegisterable
             Meta = new CardMeta
             {
                 deck = ModEntry.Instance.CarterDeck.Deck,
-                rarity = Rarity.common,
+                rarity = Rarity.uncommon,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
             Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "GlitzAndGlam", "name"]).Localize,
@@ -30,16 +30,12 @@ public class GlitzAndGlam : Card, IRegisterable
     
     public override List<CardAction> GetActions(State s, Combat c)
     {
-        if (value is null)
-        {
-            value = upgrade == Upgrade.A ? 1 : 0; // cause can't access upgrade at init
-        }
         return [
             new AAttack {
-                damage = GetDmg(s, (int)value)
+                damage = GetDmg(s, GetEffectValue())
             },
             new AStatus {
-                statusAmount = (int)value,
+                statusAmount = GetEffectValue(),
                 targetPlayer = true,
                 status = Status.shield
             }
@@ -51,15 +47,16 @@ public class GlitzAndGlam : Card, IRegisterable
     }
     public int OnPlaySet()
     {
-        if (value is null)
-        {
-            value = upgrade == Upgrade.A ? 1 : 0; // cause can't access upgrade at init
-        }
-        return upgrade == Upgrade.B ? (int)value - 1 : 0;
+        return upgrade == Upgrade.B ? value - 1 : 0;
+    }
+
+    public int GetEffectValue()
+    {
+        return value + (upgrade == Upgrade.A ? 1 : 0);
     }
     public override void OnExitCombat(State s, Combat c)
     {
-        value = 3;
+        value = 0;
     }
     public override void OnDraw(State s, Combat c)
     {
@@ -71,15 +68,11 @@ public class GlitzAndGlam : Card, IRegisterable
     }
     public override CardData GetData(State state)
     {
-        if (value is null)
-        {
-            value = upgrade == Upgrade.A ? 1 : 0; // cause can't access upgrade at init
-        }
         return new CardData
         {
             cost = 1,
-            description = upgrade == Upgrade.B ? ModEntry.Instance.Localizations.Localize(["card", "GlitzAndGlam", "descB"], new { cur = value, drw = OnDrawAdd() }) :
-                ModEntry.Instance.Localizations.Localize(["card", "GlitzAndGlam", "desc"], new { cur = value, drw = OnDrawAdd(), bse = OnPlaySet() })
+            description = upgrade == Upgrade.B ? ModEntry.Instance.Localizations.Localize(["card", "GlitzAndGlam", "descB"], new { cur = GetEffectValue(), drw = OnDrawAdd() }) :
+                ModEntry.Instance.Localizations.Localize(["card", "GlitzAndGlam", "desc"], new { cur = GetEffectValue(), drw = OnDrawAdd(), bse = OnPlaySet() })
         };
     }
 

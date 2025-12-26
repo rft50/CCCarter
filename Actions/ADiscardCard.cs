@@ -15,6 +15,7 @@ public class ADiscardCard : CardAction
             return;
         }
         s.RemoveCardFromWhereverItIs(selectedCard.uuid);
+        selectedCard.OnDiscard(s, c);
         c.SendCardToDiscard(s, selectedCard);
     }
 
