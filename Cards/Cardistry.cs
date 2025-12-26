@@ -1,17 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
+using Carter.Actions;
 using Nanoray.PluginManager;
 using Nickel;
-using Carter.Actions;
-using Carter.Features;
 
 namespace Carter.Cards;
 
-public class CardVanish : Card, IRegisterable
+public class Cardistry : Card, IRegisterable
 {
-
-
     public static void Register(IPluginPackage<IModManifest> package, IModHelper helper)
     {
         helper.Content.Cards.RegisterCard(new CardConfiguration
@@ -20,26 +16,30 @@ public class CardVanish : Card, IRegisterable
             Meta = new CardMeta
             {
                 deck = ModEntry.Instance.CarterDeck.Deck,
-                rarity = Rarity.common,
+                rarity = Rarity.rare,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
-            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "CardVanish", "name"]).Localize,
+            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "Cardistry", "name"]).Localize,
             // Art = ModEntry.Instance.card...
         });
     }
     
     public override List<CardAction> GetActions(State s, Combat c)
     {
-        return [
-            ModEntry.Instance.KokoroApiV2.ActionCosts.MakeCostAction(
-                ModEntry.Instance.KokoroApiV2.ActionCosts.MakeResourceCost(upgrade == Upgrade.B ? new ExhaustResource() : new DiscardResource(), 1),
-                new AStatus
-                {
-                    status = Status.tempShield,
-                    statusAmount = upgrade == Upgrade.A ? 2 : 1,
-                    targetPlayer = true
-                }
-            ).AsCardAction
+        return
+        [
+            new AStatus
+            {
+                status = ModEntry.Instance.CardistryStatus.Status,
+                statusAmount = upgrade == Upgrade.B ? 2 : 1,
+                targetPlayer = true
+            },
+            new AStatus
+            {
+                status = Status.drawNextTurn,
+                statusAmount = upgrade == Upgrade.B ? 2 : 1,
+                targetPlayer = true
+            }
         ];
     }
     
@@ -47,8 +47,13 @@ public class CardVanish : Card, IRegisterable
     {
         return new CardData
         {
-            cost = 0
+            cost = upgrade switch
+            {
+                Upgrade.A => 1,
+                Upgrade.B => 3,
+                _ => 2
+            },
+            exhaust = true
         };
     }
-
 }

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Carter.Actions;
 using Nanoray.PluginManager;
@@ -7,10 +6,8 @@ using Nickel;
 
 namespace Carter.Cards;
 
-public class Showstopper : Card, IRegisterable
+public class DoubleLift : Card, IRegisterable
 {
-
-
     public static void Register(IPluginPackage<IModManifest> package, IModHelper helper)
     {
         helper.Content.Cards.RegisterCard(new CardConfiguration
@@ -19,29 +16,26 @@ public class Showstopper : Card, IRegisterable
             Meta = new CardMeta
             {
                 deck = ModEntry.Instance.CarterDeck.Deck,
-                rarity = Rarity.uncommon,
+                rarity = Rarity.rare,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
-            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "Showstopper", "name"]).Localize,
+            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "DoubleLift", "name"]).Localize,
             // Art = ModEntry.Instance.card...
         });
     }
     
     public override List<CardAction> GetActions(State s, Combat c)
     {
-        return [
-            new ACardCost {
-                mode = upgrade == Upgrade.B ? ACardCost.Mode.Exhaust : ACardCost.Mode.Discard,
-                count = upgrade == Upgrade.A ? 2 : 4,
-                actions = [
-                    new AStunShip()
-                ]
+        return
+        [
+            new ADuplicateTopdeck
+            {
+                makeTemp = upgrade != Upgrade.B
             },
-            new AStunShip() { disabled = true }
-            /*ModEntry.Instance.KokoroApiV2.SpoofedActions.MakeAction(
-                new AStunShip(),
-                new ADummyAction()
-                ).AsCardAction*/           
+            new ADrawCard
+            {
+                count = 1
+            }
         ];
     }
     
@@ -49,8 +43,10 @@ public class Showstopper : Card, IRegisterable
     {
         return new CardData
         {
-            cost = 1,
-            exhaust = true
+            cost = upgrade == Upgrade.A ? 0 : 1,
+            description = ModEntry.Instance.Localizations.Localize(["card", "DoubleLift", upgrade == Upgrade.B ? "descB" : "desc"]),
+            exhaust = upgrade != Upgrade.B,
+            singleUse = upgrade == Upgrade.B
         };
     }
 }

@@ -9,10 +9,11 @@ public class AListActions : CardAction
 
     public override void Begin(G g, State s, Combat c)
     {
-        foreach (CardAction action in actions)
+        foreach (var cardAction in actions)
         {
-            action.selectedCard = selectedCard;
-            action.Begin(g, s, c);
+            cardAction.selectedCard = selectedCard;
         }
+
+        c.QueueImmediate(actions);
     }
 }

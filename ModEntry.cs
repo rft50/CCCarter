@@ -24,19 +24,15 @@ internal class ModEntry : SimpleMod
 {
     internal static ModEntry Instance { get; private set; } = null!;
     internal Harmony Harmony;
-    internal IKokoroApi KokoroApi;
     internal IKokoroApi.IV2 KokoroApiV2;
     internal IDeckEntry CarterDeck;
     internal ICardTraitEntry Lighten;
     internal IStatusEntry StackStatus;
+    internal IStatusEntry CardistryStatus;
     internal Spr cardBottom;
     internal Spr cardTop;
     internal ILocalizationProvider<IReadOnlyList<string>> AnyLocalizations { get; }
     internal ILocaleBoundNonNullLocalizationProvider<IReadOnlyList<string>> Localizations { get; }
-
-    internal static IReadOnlyList<Type> EnemyTypes { get; } = [
-		
-    ];
 
 
     /*
@@ -62,11 +58,17 @@ internal class ModEntry : SimpleMod
     private static List<Type> CarterUncommonCardTypes = [
         typeof(Cantrip),
         typeof(Flourish),
+        typeof(Flush),
         typeof(GlitzAndGlam),
-        typeof(Showstopper),
+        typeof(Grandstand),
+        typeof(TwistingAces),
         typeof(Spread)
     ];
     private static List<Type> CarterRareCardTypes = [
+        typeof(CardThrow),
+        typeof(Cardistry),
+        typeof(DoubleLift),
+        typeof(HatTrick),
         typeof(SleightOfHand)
     ];
     private static List<Type> CarterSpecialCardTypes = [
@@ -87,20 +89,13 @@ internal class ModEntry : SimpleMod
             .Concat(CarterBossArtifacts);
 
     private static IEnumerable<Type> AllRegisterableTypes =
-        EnemyTypes.Concat(CarterCardTypes)
+        CarterCardTypes
             .Concat(CarterArtifactTypes);
 
     public ModEntry(IPluginPackage<IModManifest> package, IModHelper helper, ILogger logger) : base(package, helper, logger)
     {
         Instance = this;
         Harmony = new Harmony("kelsey.Carter");
-
-        /*
-         * Some mods provide an API, which can be requested from the ModRegistry.
-         * The following is an example of a required dependency - the code would have unexpected errors if Kokoro was not present.
-         * Dependencies can (and should) be defined within the nickel.json file, to ensure proper load mod load order.
-         */
-        KokoroApi = helper.ModRegistry.GetApi<IKokoroApi>("Shockah.Kokoro")!;
 
         KokoroApiV2 = helper.ModRegistry.GetApi<IKokoroApi>("Shockah.Kokoro")!.V2;
 
@@ -141,14 +136,9 @@ internal class ModEntry : SimpleMod
         {
             Definition = new DeckDef
             {
-                /*
-                 * This color is used in a few places:
-                 * TODO On cards, it dictates the sheen on higher rarities, as well as influences the color of the energy cost.
-                 * If this deck is given to a playable character, their name will be this color, and their mini will have this color as their border.
-                 */
-                color = new Color("00ffff"),
+                color = new Color("e075ff"),
 
-                titleColor = new Color("00ffff")
+                titleColor = new Color("75ffe0")
             },
 
             DefaultCardArt = StableSpr.cards_colorless,
@@ -197,11 +187,13 @@ internal class ModEntry : SimpleMod
         });
 
         ACardSwap.Spr = RegisterSprite(package, "assets/Icon/swap.png").Sprite;
-        ACardCost.SprDiscard = RegisterSprite(package, "assets/Icon/discard_cost_on.png").Sprite;
-        ACardCost.SprDiscardOff = RegisterSprite(package, "assets/Icon/discard_cost_off.png").Sprite;
-        ACardCost.SprExhaust = RegisterSprite(package, "assets/Icon/exhaust_cost_on.png").Sprite;
-        ACardCost.SprExhaustOff = RegisterSprite(package, "assets/Icon/exhaust_cost_off.png").Sprite;
-        // AExhaustCard.Spr = RegisterSprite(package, "assets/Icon/exhaustCard.png").Sprite;
+        ACardSwap.DrawDiscard = RegisterSprite(package, "assets/Icon/swap_draw_discard.png").Sprite;
+        ACardSwap.HandDiscard = RegisterSprite(package, "assets/Icon/swap_hand_discard.png").Sprite;
+        ACardSwap.HandDraw = RegisterSprite(package, "assets/Icon/swap_hand_draw.png").Sprite;
+        CostManager.SprDiscard = RegisterSprite(package, "assets/Icon/discard_cost_on.png").Sprite;
+        CostManager.SprDiscardOff = RegisterSprite(package, "assets/Icon/discard_cost_off.png").Sprite;
+        CostManager.SprExhaust = RegisterSprite(package, "assets/Icon/exhaust_cost_on.png").Sprite;
+        CostManager.SprExhaustOff = RegisterSprite(package, "assets/Icon/exhaust_cost_off.png").Sprite;
 
         StackStatus = helper.Content.Statuses.RegisterStatus("Stack", new StatusConfiguration
         {
@@ -215,9 +207,24 @@ internal class ModEntry : SimpleMod
             Name = AnyLocalizations.Bind(["status", "stack", "name"]).Localize,
             Description = AnyLocalizations.Bind(["status", "stack", "desc"]).Localize
         });
+        CardistryStatus = helper.Content.Statuses.RegisterStatus("Cardistry", new StatusConfiguration
+        {
+            Definition = new StatusDef
+            {
+                isGood = true,
+                affectedByTimestop = false,
+                color = new Color("00ffff"),
+                icon = RegisterSprite(package, "assets/Icon/swap.png").Sprite // TODO change to cardistry's own
+            },
+            Name = AnyLocalizations.Bind(["status", "cardistry", "name"]).Localize,
+            Description = AnyLocalizations.Bind(["status", "cardistry", "desc"]).Localize
+        });
 
         _ = new LightenManager();
         _ = new StackManager();
+        _ = new CardistryManager();
+        _ = new HatTrickManager();
+        _ = new CostManager();
 
         foreach (var type in AllRegisterableTypes)
             AccessTools.DeclaredMethod(type, nameof(IRegisterable.Register))?.Invoke(null, [package, helper]);
@@ -233,13 +240,7 @@ internal class ModEntry : SimpleMod
     {
         return Instance.Helper.Content.Sprites.RegisterSprite(package.PackageRoot.GetRelativeFile(dir));
     }
-
-    /*
-     * Animation frames are typically named very similarly, only differing by the number of the frame itself.
-     * This utility method exists to easily register an animation.
-     * It expects the animation to start at frame 0, up to frames - 1.
-     * TODO It is advised to avoid animations consisting of 2 or 3 frames.
-     */
+    
     public static void RegisterAnimation(IPluginPackage<IModManifest> package, string tag, string dir, int frames)
     {
         Instance.Helper.Content.Characters.V2.RegisterCharacterAnimation(new CharacterAnimationConfigurationV2

@@ -7,6 +7,10 @@
     "stack": {
       "name": "Stack",
       "desc": "The next {0} times you play a card that doesn’t <c=cardtrait>exhaust</c>, put it on top of your <c=keyword>draw pile</c>."
+    },
+    "cardistry": {
+      "name": "Cardistry",
+      "desc": "At the end of your turn, move up to {0} cards from your <c=keyword>discard pile</c> to the top of your <c=keyword>draw pile</c>."
     }
   },
   "card": {
@@ -23,12 +27,14 @@
       "name": "Card Vanish"
     },
     "Glide": {
-      "name": "Glide"
+      "name": "Glide",
+      "desc": "Gain 1 <c=status>EVADE</c>. Discard a card from <c=keyword>draw pile</c>. Draw {{drw}} cards.",
+      "descB": "Gain 1 <c=status>EVADE</c>. Discard two cards from <c=keyword>draw pile</c>. Draw {{drw}} cards."
     },
     "RazzleDazzle": {
       "name": "Razzle Dazzle",
-      "desc": "Attack for {{cur}}. On draw, add {{drw}}. On play reduce to {{bse}}.",
-      "descA": "Attack for {{cur}}. On draw, add {{drw}}."
+      "desc": "Attack for <c=boldPink>{{cur}}</c>. On draw, add {{drw}}. On play reduce to {{bse}}.",
+      "descA": "Attack for <c=boldPink>{{cur}}</c>. On draw, add {{drw}}."
     },
     "Roundabout": {
       "name": "Roundabout"
@@ -39,22 +45,51 @@
     "TrickDraw": {
       "name": "Trick Draw"
     },
+    
     "Cantrip": {
       "name": "Cantrip"
     },
     "Flourish": {
       "name": "Flourish"
     },
+    "Flush": {
+      "name": "Flush",
+      "desc": "Discard a card to draw {{drw}} cards of that color.",
+      "descA": "Draw 1. Discard a card to draw {{drw}} cards of that color."
+    },
     "GlitzAndGlam": {
       "name": "Glitz and Glam",
-      "desc": "Attack for {{cur}}. Gain {{cur}} shield. On draw, add {{drw}}. On play reduce to {{bse}}.",
-      "descB": "Attack for {{cur}}. Gain {{cur}} shield. On draw, add {{drw}}. On play reduce by 1."
+      "desc": "Attack for <c=boldPink>{{cur}}</c>. Gain {{cur}} shield. On draw, add {{drw}}. On play reduce to {{bse}}.",
+      "descB": "Attack for <c=boldPink>{{cur}}</c>. Gain {{cur}} shield. On draw, add {{drw}}. On play reduce by 1."
     },
-    "Showstopper": {
+    "Grandstand": {
       "name": "Grandstand"
     },
     "Spread": {
       "name": "Spread"
+    },
+    "TwistingAces": {
+      "name": "Twisting Aces",
+      "desc": "Discard and discount {{discount}} cards in your <c=keyword>draw pile</c>.",
+      "descA": "Discard and discount {{discount}} cards in your <c=keyword>draw pile</c>. Draw {{draw}}."
+    },
+    
+    "CardThrow": {
+      "name": "Card Throw",
+      "desc": "Attack for <c=attack>{{damage}}</c>. Play and exhaust a card in hand.",
+      "descB": "Attack for <c=attack>{{damage}}</c> twice. Play and exhaust 2 cards in hand."
+    },
+    "Cardistry":  {
+      "name": "Cardistry"
+    },
+    "DoubleLift": {
+      "name": "Double Lift",
+      "desc": "Make a <c=cardtrait>temp</c> copy of the top card of your <c=keyword>draw pile</c>. Draw 1.",
+      "descB": "Make a copy of the top card of your <c=keyword>draw pile</c>. Draw 1."
+    },
+    "HatTrick": {
+      "name": "Hat Trick",
+      "desc": "Attack for <c=attack>{{damage}}</c>. Return to hand after playing {{limit}} in a turn. ({{count}}/{{limit}})"
     },
     "SleightOfHand": {
       "name": "Sleight of Hand"
@@ -65,7 +100,7 @@
   "action": {
     "ACardSwap": {
       "name": "Card Swap",
-      "desc": "Choose a card in {{src}} and a card in {{dest}}. Swap their positions.\n(If one pile is empty, the chosen card will still move)"
+      "desc": "Choose a card in <c=keyword>{{src}}</c> and a card in <c=keyword>{{dest}}</c>. Swap their positions.\n(If one pile is empty, the chosen card will still move)"
     },
     "ACardCost": {
       "name": "Card Cost",

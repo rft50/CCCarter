@@ -1,7 +1,7 @@
 {
   "UniqueName": "Kelsey.Carter",
-  "Version": "0.1.2",
-  "Author": "Kelsey",
+  "Version": "0.1.0",
+  "Author": "Kelsey, rft50, Vlad",
   "Description": "Adds a new character",
   "RequiredApiVersion": "1.5.7",
   "EntryPointAssembly": "Carter.dll",

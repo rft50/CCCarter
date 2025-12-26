@@ -31,7 +31,6 @@ public class Flourish : Card, IRegisterable, IHasCustomCardTraits
         return [
             new AAttack {
                 damage = GetDmg(s, upgrade == Upgrade.None ? 1 : 2),
-                targetPlayer = true,
                 stunEnemy = upgrade == Upgrade.B
             },
             new AMove {
@@ -40,7 +39,6 @@ public class Flourish : Card, IRegisterable, IHasCustomCardTraits
             },
             new AAttack {
                 damage = GetDmg(s, upgrade == Upgrade.B ? 2 : 1),
-                targetPlayer = true,
                 stunEnemy = true
             },
         ];

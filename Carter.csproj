@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<RootNamespace>Carter</RootNamespace>
-		<Version>0.1.2</Version>
+		<Version>0.1.0</Version>
 		<IncludedModProjectPaths>i18n;assets</IncludedModProjectPaths>
 
 		<TargetFramework>net8.0</TargetFramework>
@@ -21,8 +21,6 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Artifacts\" />
-	  <Folder Include="assets\Animation\" />
 	  <Folder Include="assets\Artifact\" />
-	  <Folder Include="assets\Icon\" />
 	</ItemGroup>
 </Project>

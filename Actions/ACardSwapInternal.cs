@@ -7,6 +7,7 @@ public class ACardSwapInternal : CardAction
 {
     public CardBrowse.Source source;
     public CardBrowse.Source destination;
+    public int? sourceUuid;
 
     public override Route? BeginWithRoute(G g, State s, Combat c)
     {
@@ -24,7 +25,8 @@ public class ACardSwapInternal : CardAction
                 destination = destination,
                 selectedCardOther = selectedCard
             },
-            allowCancel = false
+            allowCancel = false,
+            filterUUID = sourceUuid
         };
         c.Queue(new ADelay
         {
@@ -38,7 +40,7 @@ public class ACardSwapInternal : CardAction
             {
                 source = source,
                 destination = destination,
-                selectedCardOther = selectedCard
+                selectedCardOther = selectedCard,
             }.Begin(g, s, c);
             return null;
         }

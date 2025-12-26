@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Carter.Actions;
+using Carter.External;
+using Carter.Features;
 using Nanoray.PluginManager;
 using Nickel;
-using Carter.Actions;
-using Carter.Features;
 
 namespace Carter.Cards;
 
-public class CardVanish : Card, IRegisterable
+public class Grandstand : Card, IRegisterable
 {
 
 
@@ -20,10 +21,10 @@ public class CardVanish : Card, IRegisterable
             Meta = new CardMeta
             {
                 deck = ModEntry.Instance.CarterDeck.Deck,
-                rarity = Rarity.common,
+                rarity = Rarity.uncommon,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
-            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "CardVanish", "name"]).Localize,
+            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "Grandstand", "name"]).Localize,
             // Art = ModEntry.Instance.card...
         });
     }
@@ -32,14 +33,10 @@ public class CardVanish : Card, IRegisterable
     {
         return [
             ModEntry.Instance.KokoroApiV2.ActionCosts.MakeCostAction(
-                ModEntry.Instance.KokoroApiV2.ActionCosts.MakeResourceCost(upgrade == Upgrade.B ? new ExhaustResource() : new DiscardResource(), 1),
-                new AStatus
-                {
-                    status = Status.tempShield,
-                    statusAmount = upgrade == Upgrade.A ? 2 : 1,
-                    targetPlayer = true
-                }
-            ).AsCardAction
+                ModEntry.Instance.KokoroApiV2.ActionCosts.MakeResourceCost(upgrade == Upgrade.B ? new ExhaustResource() : new DiscardResource(), upgrade == Upgrade.A ? 2 : 4),
+                ModEntry.Instance.KokoroApiV2.ContinueStop.MakeTriggerAction(IKokoroApi.IV2.IContinueStopApi.ActionType.Continue, out var id).AsCardAction
+            ).AsCardAction,
+            ModEntry.Instance.KokoroApiV2.ContinueStop.MakeFlaggedAction(IKokoroApi.IV2.IContinueStopApi.ActionType.Continue, id, new AStunShip()).AsCardAction
         ];
     }
     
@@ -47,8 +44,8 @@ public class CardVanish : Card, IRegisterable
     {
         return new CardData
         {
-            cost = 0
+            cost = 1,
+            exhaust = true
         };
     }
-
 }

@@ -41,7 +41,12 @@ public class Cantrip : Card, IRegisterable
         res.AddRange([
             new AStatus {
                 status = ModEntry.Instance.StackStatus.Status,
-                statusAmount = upgrade == Upgrade.B ? 3 : upgrade == Upgrade.A ? 2 : 1,
+                statusAmount = upgrade switch
+                {
+                    Upgrade.B => 3,
+                    Upgrade.A => 2,
+                    _ => 1
+                },
                 targetPlayer = true
             }
         ]);

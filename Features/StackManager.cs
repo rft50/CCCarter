@@ -19,11 +19,11 @@ internal sealed class StackManager
 
     private static void Combat_TryPlayCard_Finalizer(Combat __instance, State s, Card card, bool playNoMatterWhatForFree, bool exhaustNoMatterWhat, ref bool __result)
     {
-        if (!__result) { return; }
-        if (s.ship.Get(ModEntry.Instance.StackStatus.Status) <= 0 || card.GetDataWithOverrides(s).exhaust)
-        {
-            return;
-        }
+        if (!__result) return;
+        if (s.ship.Get(ModEntry.Instance.StackStatus.Status) <= 0) return;
+        var cardData = card.GetDataWithOverrides(s);
+        if (cardData.exhaust || cardData.singleUse) return;
+        
         s.RemoveCardFromWhereverItIs(card.uuid);
         s.SendCardToDeck(card);
         __instance.QueueImmediate(new AStatus

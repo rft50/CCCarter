@@ -36,15 +36,15 @@ public class Glide : Card, IRegisterable
                 status = Status.evade
             },
             new ACardCost {
-                mode = ACardCost.Mode.Discard,
+                origin = CardDestination.Deck,
+                destination = CardDestination.Discard,
                 count = upgrade == Upgrade.B ? 2 : 1,
                 actions = []
             },
-            new ADummyAction()];
-        res.Add(new ADrawCard
-        {
-            count = upgrade == Upgrade.A ? 2 : 1
-        });
+            new ADrawCard
+            {
+                count = upgrade == Upgrade.A ? 2 : 1
+            }];
         return res;
     }
     
@@ -52,7 +52,8 @@ public class Glide : Card, IRegisterable
     {
         return new CardData
         {
-            cost = 1
+            cost = 1,
+            description = ModEntry.Instance.Localizations.Localize(["card", "Glide", upgrade == Upgrade.B ? "descB" : "desc"], new { drw = upgrade == Upgrade.A ? 2 : 1 })
         };
     }
 }

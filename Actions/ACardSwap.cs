@@ -6,20 +6,26 @@ namespace Carter.Actions;
 public class ACardSwap : CardAction
 {
     public static Spr Spr;
+    public static Spr DrawDiscard;
+    public static Spr HandDiscard;
+    public static Spr HandDraw;
     public CardBrowse.Source source;
     public CardBrowse.Source destination;
 
     public override Route? BeginWithRoute(G g, State s, Combat c)
     {
+        var sourceUuid = ModEntry.Instance.KokoroApiV2.ActionInfo.GetSourceCardId(this);
         CardBrowse cardBrowse = new CardBrowse
         {
             mode = CardBrowse.Mode.Browse,
             browseSource = source,
             browseAction = new ACardSwapInternal {
                 source = source,
-                destination = destination
+                destination = destination,
+                sourceUuid = sourceUuid
             },
-            allowCancel = false
+            allowCancel = false,
+            filterUUID = sourceUuid
         };
         c.Queue(new ADelay
         {
@@ -32,7 +38,8 @@ public class ACardSwap : CardAction
             return new ACardSwapInternal
             {
                 source = source,
-                destination = destination
+                destination = destination,
+                sourceUuid = sourceUuid
             }.BeginWithRoute(g, s, c);
         }
 
@@ -43,19 +50,9 @@ public class ACardSwap : CardAction
     {
         return
         [
-            /*
-             * GlossaryTooltip allows you to add arbitrary tooltips.
-             * The constructor calls for a key, which is used for preventing duplicates on things with many, such as cards.
-             * Icon is the sprite next to the title.
-             * IconColor exists to tint the sprite, but is not used here.
-             * Title is the text placed on top, next to the Icon.
-             * TitleColor tints the title's text, otherwise it will be the default color.
-             * Description is the body of the tooltip.
-             * In addition, there is IsWideIcon (for 18 px icons), FlipIconX, and FlipIconY (for flipping the sprite)
-             */
-            new GlossaryTooltip($"ACardSwap")
+            new GlossaryTooltip($"ACardSwap:{source}:{destination}")
             {
-                Icon = Spr,
+                Icon = GetSprite(source, destination),
                 Title = ModEntry.Instance.Localizations.Localize(["action", "ACardSwap", "name"]),
                 TitleColor = Colors.card,
                 Description = ModEntry.Instance.Localizations.Localize(["action", "ACardSwap", "desc"], new { src = source, dest = destination })
@@ -67,10 +64,22 @@ public class ACardSwap : CardAction
     {
         return new Icon
         {
-            path = Spr,
-            // number = count == 1 ? null : count,
-            number = null,
+            path = GetSprite(source, destination),
             color = Colors.textMain
         };
+    }
+
+    public static Spr GetSprite(CardBrowse.Source source, CardBrowse.Source destination)
+    {
+        if (source == CardBrowse.Source.DrawPile && destination == CardBrowse.Source.DiscardPile) return DrawDiscard;
+        if (source == CardBrowse.Source.DiscardPile && destination == CardBrowse.Source.DrawPile) return DrawDiscard;
+        
+        if (source == CardBrowse.Source.Hand && destination == CardBrowse.Source.DiscardPile) return HandDiscard;
+        if (source == CardBrowse.Source.DiscardPile && destination == CardBrowse.Source.Hand) return HandDiscard;
+        
+        if (source == CardBrowse.Source.Hand && destination == CardBrowse.Source.DrawPile) return HandDraw;
+        if (source == CardBrowse.Source.DrawPile && destination == CardBrowse.Source.Hand) return HandDraw;
+        
+        return Spr;
     }
 }

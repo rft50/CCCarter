@@ -1,17 +1,14 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using Nanoray.PluginManager;
-using Nickel;
 using Carter.Actions;
 using Carter.Features;
+using Nanoray.PluginManager;
+using Nickel;
 
 namespace Carter.Cards;
 
-public class CardVanish : Card, IRegisterable
+public class HatTrick : Card, IRegisterable
 {
-
-
     public static void Register(IPluginPackage<IModManifest> package, IModHelper helper)
     {
         helper.Content.Cards.RegisterCard(new CardConfiguration
@@ -20,26 +17,22 @@ public class CardVanish : Card, IRegisterable
             Meta = new CardMeta
             {
                 deck = ModEntry.Instance.CarterDeck.Deck,
-                rarity = Rarity.common,
+                rarity = Rarity.rare,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
-            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "CardVanish", "name"]).Localize,
+            Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "HatTrick", "name"]).Localize,
             // Art = ModEntry.Instance.card...
         });
     }
     
     public override List<CardAction> GetActions(State s, Combat c)
     {
-        return [
-            ModEntry.Instance.KokoroApiV2.ActionCosts.MakeCostAction(
-                ModEntry.Instance.KokoroApiV2.ActionCosts.MakeResourceCost(upgrade == Upgrade.B ? new ExhaustResource() : new DiscardResource(), 1),
-                new AStatus
-                {
-                    status = Status.tempShield,
-                    statusAmount = upgrade == Upgrade.A ? 2 : 1,
-                    targetPlayer = true
-                }
-            ).AsCardAction
+        return
+        [
+            new AAttack
+            {
+                damage = GetDmg(s, upgrade == Upgrade.B ? 2 : 1)
+            }
         ];
     }
     
@@ -47,8 +40,14 @@ public class CardVanish : Card, IRegisterable
     {
         return new CardData
         {
-            cost = 0
+            cost = 0,
+            description = ModEntry.Instance.Localizations.Localize(["card", "HatTrick", "desc"], new
+            {
+                damage = GetDmg(state, upgrade == Upgrade.B ? 2 : 1),
+                count = HatTrickManager.GetCardPlayCount(state),
+                limit = HatTrickManager.GetHatTrickLimitForUpgrade(upgrade)
+            }),
+            exhaust = true
         };
     }
-
 }

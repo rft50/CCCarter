@@ -11,7 +11,7 @@ namespace Carter.Cards;
 public class RazzleDazzle : Card, IRegisterable
 {
 
-    public int value = 1;
+    public int value = 3;
     public static void Register(IPluginPackage<IModManifest> package, IModHelper helper)
     {
         helper.Content.Cards.RegisterCard(new CardConfiguration
