@@ -1,6 +1,7 @@
 ﻿using Nickel;
 using System;
 using System.Collections.Generic;
+using Carter.External;
 using Carter.Features;
 
 namespace Carter.Actions;
@@ -23,43 +24,26 @@ public class ACardCost : CardAction
         {
             mode = destination
         };
-        if (count <= 1)
-        {
-            actions.Insert(0, selectedAction);
-        }
-        else
-        {
-            List<CardAction> newActions = new List<CardAction>(actions);
-            actions = [
-                selectedAction,
-                new ACardCost {
-                    count = count - 1,
-                    optional = optional,
-                    origin = origin,
-                    destination = destination,
-                    actions = newActions
-                }
-            ];    
-        }
+        actions.Insert(0, selectedAction);
         CardBrowse cardBrowse = new CardBrowse
         {
             mode = CardBrowse.Mode.Browse,
             browseSource = Source(origin),
-            browseAction = new AListActions { actions = actions },
+            browseAction = new AMultiBrowseListActions { actions = actions },
             allowCancel = optional
         };
-        c.Queue(new ADelay
-        {
-            time = 0.0,
-            timer = 0.0
-        });
         if (cardBrowse.GetCardList(g).Count == 0)
         {
             timer = 0.0;
             return null;
         }
-
-        return cardBrowse;
+        count = Math.Min(count, cardBrowse.GetCardList(g).Count);
+        
+        var multiBrowseRoute = ModEntry.Instance.KokoroApiV2.MultiCardBrowse.MakeRoute(cardBrowse);
+        multiBrowseRoute.MaxSelected = count;
+        multiBrowseRoute.MinSelected = optional ? 0 : count;
+        
+        return multiBrowseRoute.AsRoute;
     }
 
     public override List<Tooltip> GetTooltips(State s)

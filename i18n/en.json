@@ -106,6 +106,10 @@
       "name": "Card Cost",
       "desc": "Choose {{cnt}} cards in your hand to {{mode}} to trigger this effect."
     },
+    "ADiscardFromDraw": {
+      "name": "Card Cost",
+      "desc": "Choose <c=boldPink>{{cnt}}</c> cards in the draw pile to discard."
+    },
     "ADiscardCard": {
       "name": "Discard Card",
       "desc": "Discard the selected card."

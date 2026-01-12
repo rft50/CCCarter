@@ -194,6 +194,7 @@ internal class ModEntry : SimpleMod
         CostManager.SprDiscardOff = RegisterSprite(package, "assets/Icon/discard_cost_off.png").Sprite;
         CostManager.SprExhaust = RegisterSprite(package, "assets/Icon/exhaust_cost_on.png").Sprite;
         CostManager.SprExhaustOff = RegisterSprite(package, "assets/Icon/exhaust_cost_off.png").Sprite;
+        ADiscardFromDrawDummy.Spr = RegisterSprite(package, "assets/Icon/Discard_Draw_Pile.png").Sprite;
 
         StackStatus = helper.Content.Statuses.RegisterStatus("Stack", new StatusConfiguration
         {
@@ -229,6 +230,17 @@ internal class ModEntry : SimpleMod
         foreach (var type in AllRegisterableTypes)
             AccessTools.DeclaredMethod(type, nameof(IRegisterable.Register))?.Invoke(null, [package, helper]);
 
+        // optional API stuff
+        helper.ModRegistry.AwaitApi<IMoreDifficultiesApi>("TheJazMaster.MoreDifficulties", mdo =>
+        {
+            mdo.RegisterAltStarters(CarterDeck.Deck, new StarterDeck
+            {
+                cards = [
+                    new Stack(),
+                    new TrickDraw()
+                ]
+            });
+        });
     }
     
     /*

@@ -35,12 +35,12 @@ public class Glide : Card, IRegisterable
                 statusAmount = 1,
                 status = Status.evade
             },
-            new ACardCost {
+            ADiscardFromDrawDummy.Spoof(new ACardCost {
                 origin = CardDestination.Deck,
                 destination = CardDestination.Discard,
                 count = upgrade == Upgrade.B ? 2 : 1,
                 actions = []
-            },
+            }),
             new ADrawCard
             {
                 count = upgrade == Upgrade.A ? 2 : 1
@@ -52,8 +52,7 @@ public class Glide : Card, IRegisterable
     {
         return new CardData
         {
-            cost = 1,
-            description = ModEntry.Instance.Localizations.Localize(["card", "Glide", upgrade == Upgrade.B ? "descB" : "desc"], new { drw = upgrade == Upgrade.A ? 2 : 1 })
+            cost = 1
         };
     }
 }
