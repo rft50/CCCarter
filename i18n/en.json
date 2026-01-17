@@ -96,6 +96,38 @@
     }
   },
   "artifact": {
+    "ColorfulSequins": {
+      "name": "COLORFUL SEQUINS",
+      "desc": "On turn 2, draw 1 card from each of your crew members."
+    },
+    "FoldedCorner": {
+      "name": "FOLDED CORNER",
+      "desc": "Every 4 times you play a Carter card gain 1 <c=status>STACK</c>."
+    },
+    "MagicGloves": {
+      "name": "MAGIC GLOVES",
+      "desc": "At the end of your turn, gain 1 <c=status>DRAW NEXT TURN</c> for every Energy you ended your turn with."
+    },
+    "MulliganTicket": {
+      "name": "MULLIGAN TICKET",
+      "desc": "The first time each combat you play a card that doesn't exhaust, return it to your hand immediately."
+    },
+    "SecretPocket": {
+      "name": "SECRET POCKET",
+      "desc": "Every 3rd turn, draw 1 additional card."
+    },
+    "AllSeeingEye": {
+      "name": "ALL-SEEING EYE",
+      "desc": "Every 2 turns, choose a card in the draw pile or discard to put into your hand. <c=downside>Draw 1 less card every turn.</c>"
+    },
+    "LightAsAFeather": {
+      "name": "LIGHT AS A FEATHER",
+      "desc": "All cards gain Lighten. Whenever you play a Lighten card that costs 0, Exhaust it."
+    },
+    "TrickDeck": {
+      "name": "TRICK DECK",
+      "desc": "Draw 1 additional card every turn. <c=downside>At the start of your turn, move a card in hand to the bottom of the draw pile.</c>"
+    }
   },
   "action": {
     "ACardSwap": {

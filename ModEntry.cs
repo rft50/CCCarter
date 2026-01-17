@@ -12,10 +12,8 @@ using Carter.Cards;
 using Carter.External;
 // using Carter.Enemies;
 using Carter.Features;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
-using Microsoft.Xna.Framework;
-using System.Xml.Linq;
-using System.Diagnostics;
+using Carter.Artifacts;
+
 // using Carter.Artifacts;
 
 namespace Carter;
@@ -80,9 +78,16 @@ internal class ModEntry : SimpleMod
             .Concat(CarterSpecialCardTypes);
 
     private static List<Type> CarterCommonArtifacts = [
-
+        typeof(ColorfulSequins),
+        typeof(FoldedCorner),
+        typeof(MagicGloves),
+        typeof(MulliganTicket),
+        typeof(SecretPocket)
     ];
     private static List<Type> CarterBossArtifacts = [
+        typeof(AllSeeingEye),
+        typeof(LightAsAFeather),
+        typeof(TrickDeck)
     ];
     private static IEnumerable<Type> CarterArtifactTypes =
         CarterCommonArtifacts
@@ -183,6 +188,17 @@ internal class ModEntry : SimpleMod
                 artifacts = [
                 ]
             },
+            SoloStarters = new StarterDeck
+            {
+                cards = [
+                    new ShuffleStep(),
+                    new SwitchShot(),
+                    new Stack(),
+                    new Glide(),
+                    new CannonColorless(),
+                    new BasicShieldColorless()
+                ]
+            },
             Description = AnyLocalizations.Bind(["character", "desc"]).Localize
         });
 
@@ -238,6 +254,18 @@ internal class ModEntry : SimpleMod
                 cards = [
                     new Stack(),
                     new TrickDraw()
+                ]
+            });
+        });
+        
+        helper.ModRegistry.AwaitApi<ICustomRunOptionsApi>("Shockah.CustomRunOptions", cro =>
+        {
+            cro.RegisterPartialDuoDeck(CarterDeck.Deck, new StarterDeck
+            {
+                cards = [
+                    new ShuffleStep(),
+                    new SwitchShot(),
+                    new Stack()
                 ]
             });
         });
