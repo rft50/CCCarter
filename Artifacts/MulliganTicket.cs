@@ -42,9 +42,9 @@ public class MulliganTicket : Artifact, IRegisterable
         );
     }
 
-    public static void Combat_TryPlayCard_Postfix(Combat __instance, State s, Card card, bool __result)
+    public static void Combat_TryPlayCard_Postfix(Combat __instance, State s, Card card, bool __result, bool exhaustNoMatterWhat)
     {
-        if (!__result) return;
+        if (!__result || exhaustNoMatterWhat) return;
         if (s.EnumerateAllArtifacts().OfType<MulliganTicket>().FirstOrDefault((MulliganTicket?) null) is not {} artifact) return;
         
         if (artifact.used) return;
