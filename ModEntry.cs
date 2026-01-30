@@ -13,6 +13,7 @@ using Carter.External;
 // using Carter.Enemies;
 using Carter.Features;
 using Carter.Artifacts;
+using Carter.Artifacts.Duos;
 
 // using Carter.Artifacts;
 
@@ -96,6 +97,19 @@ internal class ModEntry : SimpleMod
     private static IEnumerable<Type> AllRegisterableTypes =
         CarterCardTypes
             .Concat(CarterArtifactTypes);
+
+    private static List<Type> DuoArtifacts =
+    [
+        typeof(CarterDizzyDuo),
+        typeof(CarterRiggsDuo),
+        typeof(CarterPeriDuo),
+        typeof(CarterIsaacDuo),
+        typeof(CarterDrakeDuo),
+        typeof(CarterMaxDuo),
+        typeof(CarterBooksDuo),
+        typeof(CarterCatDuo),
+        typeof(CarterDynaDuo)
+    ];
 
     public ModEntry(IPluginPackage<IModManifest> package, IModHelper helper, ILogger logger) : base(package, helper, logger)
     {
@@ -242,6 +256,7 @@ internal class ModEntry : SimpleMod
         _ = new CardistryManager();
         _ = new HatTrickManager();
         _ = new CostManager();
+        _ = new DrawDuringTurnManager();
 
         foreach (var type in AllRegisterableTypes)
             AccessTools.DeclaredMethod(type, nameof(IRegisterable.Register))?.Invoke(null, [package, helper]);
@@ -268,6 +283,13 @@ internal class ModEntry : SimpleMod
                     new Stack()
                 ]
             });
+        });
+        
+        // duo registration
+        helper.ModRegistry.AwaitApi<IDuoApi>("Shockah.DuoArtifacts", api =>
+        {
+            foreach (var artifactType in DuoArtifacts)
+                AccessTools.DeclaredMethod(artifactType, nameof(IDuoArtifact.Register))?.Invoke(null, [package, helper, api]);
         });
     }
     

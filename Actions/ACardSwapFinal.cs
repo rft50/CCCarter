@@ -1,6 +1,8 @@
 ﻿using Nickel;
 using System;
 using System.Collections.Generic;
+using Carter.Features;
+
 namespace Carter.Actions;
 
 public class ACardSwapFinal : CardAction
@@ -42,6 +44,7 @@ public class ACardSwapFinal : CardAction
                 break;
             case CardBrowse.Source.Hand:
                 c.hand[c.hand.IndexOf(cardFromPlace)] = cardToPlace;
+                DrawDuringTurnManager.TryCardDrawAnnouncement(s, c);
                 cardToPlace.OnDraw(s, c);
                 foreach (var enumerateAllArtifact in s.EnumerateAllArtifacts())
                     enumerateAllArtifact.OnDrawCard(s, c, 1);
@@ -65,6 +68,7 @@ public class ACardSwapFinal : CardAction
                 break;
             case CardBrowse.Source.Hand:
                 c.hand.Add(cardToPlace);
+                DrawDuringTurnManager.TryCardDrawAnnouncement(s, c);
                 cardToPlace.OnDraw(s, c);
                 foreach (var enumerateAllArtifact in s.EnumerateAllArtifacts())
                     enumerateAllArtifact.OnDrawCard(s, c, 1);

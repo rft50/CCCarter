@@ -72,7 +72,7 @@ public class GlitzAndGlam : Card, IRegisterable
         {
             cost = 1,
             description = upgrade == Upgrade.B ? ModEntry.Instance.Localizations.Localize(["card", "GlitzAndGlam", "descB"], new { cur = GetEffectValue(), drw = OnDrawAdd() }) :
-                ModEntry.Instance.Localizations.Localize(["card", "GlitzAndGlam", "desc"], new { cur = GetEffectValue(), drw = OnDrawAdd(), bse = OnPlaySet() })
+                ModEntry.Instance.Localizations.Localize(["card", "GlitzAndGlam", "desc"], new { cur = GetEffectValue(), drw = OnDrawAdd(), bse = upgrade == Upgrade.A ? 1 : 0 })
         };
     }
 

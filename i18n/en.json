@@ -127,6 +127,44 @@
     "TrickDeck": {
       "name": "TRICK DECK",
       "desc": "Draw 1 additional card every turn. <c=downside>At the start of your turn, move a card in hand to the bottom of the draw pile.</c>"
+    },
+    "duo": {
+      "Dizzy": {
+        "name": "CARD SLEEVE",
+        "desc": "Every 3rd time you draw additional cards during your turn, gain 1 <c=status>TEMP SHIELD</c>."
+      },
+      "Riggs": {
+        "name": "GOLD CARD",
+        "desc": "Whenever you play a Riggs card and a Carder card in the same turn, gain 1 <c=status>DRAW NEXT TURN</c>."
+      },
+      "Peri": {
+        "name": "GUN OIL",
+        "desc": "Every 7th time you attack, draw 1."
+      },
+      "Isaac": {
+        "name": "TORN CARD",
+        "desc": "Whenever a midrow object is destroyed during the enemy's turn, draw 1."
+      },
+      "Drake": {
+        "name": "ACE OF DIAMONDS",
+        "desc": "While you have 3+ <c=downside>HEAT</c>, whenever you draw any cards, draw 1 more."
+      },
+      "Max": {
+        "name": "BACKDOOR",
+        "desc": "Every 2 turns, choose a card to move from the exhaust pile to the bottom of your draw pile."
+      },
+      "Books": {
+        "name": "SPARKLING WAND",
+        "desc": "The first time each turn you play a Crystal Shard, gain 1 <c=status>STACK</c>."
+      },
+      "Cat": {
+        "name": "AUTO SHUFFLER",
+        "desc": "Whenever you shuffle your deck, temporary cards will be on the top of the deck."
+      },
+      "Dyna": {
+        "name": "CARD FRICTION",
+        "desc": "Every 4th time you draw additional cards during your turn, gain 1 <c=status>TEMP NITRO</c>."
+      }
     }
   },
   "action": {
