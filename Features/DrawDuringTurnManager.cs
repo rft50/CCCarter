@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using Carter.Actions;
+using HarmonyLib;
 
 namespace Carter.Features;
 
@@ -19,9 +20,9 @@ public class DrawDuringTurnManager
 
     private static void Combat_BeginCardAction_Prefix(CardAction a, Combat __instance)
     {
-        ModEntry.Instance.Helper.ModData.SetModData(__instance, "ListeningForDraw", true);
-        if (a is AStartPlayerTurn)
-            ModEntry.Instance.Helper.ModData.SetModData(__instance, "ListeningForDraw", false);
+        ModEntry.Instance.Helper.ModData.SetModData(__instance, "ListeningForDraw", false);
+        if (a is ADrawCard or ASearchForColor or ACardSwapFinal)
+            ModEntry.Instance.Helper.ModData.SetModData(__instance, "ListeningForDraw", true);
     }
 
     private static void Combat_SendCardToHand_Prefix(State s, Combat __instance)

@@ -71,9 +71,23 @@ public class CarterRiggsDuo : Artifact, IDuoArtifact
     public bool riggs = false;
     public bool carter = false;
     public bool activated = false;
+
+    public static Spr[] sprites = new Spr[4];
     
     public static void Register(IPluginPackage<IModManifest> package, IModHelper helper, IDuoApi duoApi)
     {
+        sprites[0] = helper.Content.Sprites
+            .RegisterSprite(package.PackageRoot.GetRelativeFile("assets/Artifact/Duo/gold_card_0.png"))
+            .Sprite;
+        sprites[1] = helper.Content.Sprites
+            .RegisterSprite(package.PackageRoot.GetRelativeFile("assets/Artifact/Duo/gold_card_1.png"))
+            .Sprite;
+        sprites[2] = helper.Content.Sprites
+            .RegisterSprite(package.PackageRoot.GetRelativeFile("assets/Artifact/Duo/gold_card_2.png"))
+            .Sprite;
+        sprites[3] = helper.Content.Sprites
+            .RegisterSprite(package.PackageRoot.GetRelativeFile("assets/Artifact/Duo/gold_card_3.png"))
+            .Sprite;
         helper.Content.Artifacts.RegisterArtifact(MethodBase.GetCurrentMethod()!.DeclaringType!.Name, new()
         {
             ArtifactType = MethodBase.GetCurrentMethod()!.DeclaringType!,
@@ -81,9 +95,7 @@ public class CarterRiggsDuo : Artifact, IDuoArtifact
             {
                 owner = duoApi.DuoArtifactVanillaDeck
             },
-            Sprite = helper.Content.Sprites
-                .RegisterSprite(package.PackageRoot.GetRelativeFile("assets/Artifact/Duo/gold_card.png"))
-                .Sprite,
+            Sprite = sprites[3],
             Name = ModEntry.Instance.AnyLocalizations.Bind(["artifact", "duo", "Riggs", "name"]).Localize,
             Description = ModEntry.Instance.AnyLocalizations.Bind(["artifact", "duo", "Riggs", "desc"]).Localize
         });
@@ -95,6 +107,11 @@ public class CarterRiggsDuo : Artifact, IDuoArtifact
     [
         new TTGlossary("status.drawNextTurn", 1)
     ];
+
+    public int CurrentState()
+    {
+        return (riggs ? 1 : 0) + (carter ? 2 : 0);
+    }
 
     public override void OnPlayerPlayCard(int energyCost, Deck deck, Card card, State state, Combat combat, int handPosition,
         int handCount)
@@ -114,6 +131,21 @@ public class CarterRiggsDuo : Artifact, IDuoArtifact
                 artifactPulse = Key()
             });
         }
+    }
+
+    public override Spr GetSprite()
+    {
+        return sprites[CurrentState()];
+    }
+
+    public override void OnTurnStart(State state, Combat combat)
+    {
+        riggs = carter = activated = false;
+    }
+    
+    public override void OnCombatEnd(State state)
+    {
+        riggs = carter = true;
     }
 }
 
@@ -202,8 +234,17 @@ public class CarterIsaacDuo : Artifact, IDuoArtifact
 
 public class CarterDrakeDuo : Artifact, IDuoArtifact
 {
+    public static Spr on;
+    public static Spr off;
+    
     public static void Register(IPluginPackage<IModManifest> package, IModHelper helper, IDuoApi duoApi)
     {
+        on = helper.Content.Sprites
+            .RegisterSprite(package.PackageRoot.GetRelativeFile("assets/Artifact/Duo/ace_of_diamonds_on.png"))
+            .Sprite;
+        off = helper.Content.Sprites
+            .RegisterSprite(package.PackageRoot.GetRelativeFile("assets/Artifact/Duo/ace_of_diamonds.png"))
+            .Sprite;
         helper.Content.Artifacts.RegisterArtifact(MethodBase.GetCurrentMethod()!.DeclaringType!.Name, new()
         {
             ArtifactType = MethodBase.GetCurrentMethod()!.DeclaringType!,
@@ -211,9 +252,7 @@ public class CarterDrakeDuo : Artifact, IDuoArtifact
             {
                 owner = duoApi.DuoArtifactVanillaDeck
             },
-            Sprite = helper.Content.Sprites
-                .RegisterSprite(package.PackageRoot.GetRelativeFile("assets/Artifact/Duo/ace_of_diamonds.png"))
-                .Sprite,
+            Sprite = off,
             Name = ModEntry.Instance.AnyLocalizations.Bind(["artifact", "duo", "Drake", "name"]).Localize,
             Description = ModEntry.Instance.AnyLocalizations.Bind(["artifact", "duo", "Drake", "desc"]).Localize
         });
@@ -234,6 +273,11 @@ public class CarterDrakeDuo : Artifact, IDuoArtifact
 
         __instance.count++;
         artifact.Pulse();
+    }
+
+    public override Spr GetSprite()
+    {
+        return (MG.inst.g.state.ship.Get(Status.heat) >= 3) ? on : off;
     }
 }
 
@@ -284,9 +328,18 @@ public class CarterMaxDuo : Artifact, IDuoArtifact
 public class CarterBooksDuo : Artifact, IDuoArtifact
 {
     public bool ready = true;
+
+    public static Spr on;
+    public static Spr off;
     
     public static void Register(IPluginPackage<IModManifest> package, IModHelper helper, IDuoApi duoApi)
     {
+        on = helper.Content.Sprites
+            .RegisterSprite(package.PackageRoot.GetRelativeFile("assets/Artifact/Duo/sparkling_wand.png"))
+            .Sprite;
+        off = helper.Content.Sprites
+            .RegisterSprite(package.PackageRoot.GetRelativeFile("assets/Artifact/Duo/sparkling_wand_off.png"))
+            .Sprite;
         helper.Content.Artifacts.RegisterArtifact(MethodBase.GetCurrentMethod()!.DeclaringType!.Name, new()
         {
             ArtifactType = MethodBase.GetCurrentMethod()!.DeclaringType!,
@@ -294,9 +347,7 @@ public class CarterBooksDuo : Artifact, IDuoArtifact
             {
                 owner = duoApi.DuoArtifactVanillaDeck
             },
-            Sprite = helper.Content.Sprites
-                .RegisterSprite(package.PackageRoot.GetRelativeFile("assets/Artifact/Duo/sparkling_wand.png"))
-                .Sprite,
+            Sprite = on,
             Name = ModEntry.Instance.AnyLocalizations.Bind(["artifact", "duo", "Books", "name"]).Localize,
             Description = ModEntry.Instance.AnyLocalizations.Bind(["artifact", "duo", "Books", "desc"]).Localize
         });
@@ -334,6 +385,11 @@ public class CarterBooksDuo : Artifact, IDuoArtifact
     public override void OnCombatEnd(State state)
     {
         ready = true;
+    }
+
+    public override Spr GetSprite()
+    {
+        return ready ? on : off;
     }
 }
 
