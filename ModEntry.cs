@@ -28,8 +28,6 @@ internal class ModEntry : SimpleMod
     internal ICardTraitEntry Lighten;
     internal IStatusEntry StackStatus;
     internal IStatusEntry CardistryStatus;
-    internal Spr cardBottom;
-    internal Spr cardTop;
     internal ILocalizationProvider<IReadOnlyList<string>> AnyLocalizations { get; }
     internal ILocaleBoundNonNullLocalizationProvider<IReadOnlyList<string>> Localizations { get; }
 
@@ -125,9 +123,6 @@ internal class ModEntry : SimpleMod
         Localizations = new MissingPlaceholderLocalizationProvider<IReadOnlyList<string>>(
             new CurrentLocaleOrEnglishLocalizationProvider<IReadOnlyList<string>>(AnyLocalizations)
         );
-
-        cardBottom = RegisterSprite(package, "assets/Card/Bottom.png").Sprite;
-        cardTop = RegisterSprite(package, "assets/Card/Top.png").Sprite;
 
         Spr lightenTraitSpr = RegisterSprite(package, "assets/icon/lighten.png").Sprite;
         // Debugger.Launch();

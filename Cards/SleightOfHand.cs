@@ -9,10 +9,18 @@ namespace Carter.Cards;
 
 public class SleightOfHand : Card, IRegisterable
 {
-
+    public static Spr top;
+    public static Spr bottom;
+    public static Spr regular;
 
     public static void Register(IPluginPackage<IModManifest> package, IModHelper helper)
     {
+        top = helper.Content.Sprites
+            .RegisterSprite(package.PackageRoot.GetRelativeFile("assets/Card/sleight_of_hand_upper.png")).Sprite;
+        bottom = helper.Content.Sprites
+            .RegisterSprite(package.PackageRoot.GetRelativeFile("assets/Card/sleight_of_hand_lower.png")).Sprite;
+        regular = helper.Content.Sprites
+            .RegisterSprite(package.PackageRoot.GetRelativeFile("assets/Card/sleight_of_hand.png")).Sprite;
         helper.Content.Cards.RegisterCard(new CardConfiguration
         {
             CardType = MethodBase.GetCurrentMethod()!.DeclaringType!,
@@ -23,7 +31,7 @@ public class SleightOfHand : Card, IRegisterable
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
             Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "SleightOfHand", "name"]).Localize,
-            // Art = ModEntry.Instance.card...
+            Art = regular
         });
     }
     
@@ -73,7 +81,8 @@ public class SleightOfHand : Card, IRegisterable
             cost = 0,
             exhaust = true,
             floppable = upgrade != Upgrade.B,
-            art = upgrade != Upgrade.B ? (flipped ? ModEntry.Instance.cardBottom : ModEntry.Instance.cardTop) : null
+            art = upgrade != Upgrade.B ? (flipped ? bottom : top) : regular,
+            artTint = upgrade != Upgrade.B ? "FFFFFF" : null
         };
     }
 }

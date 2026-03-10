@@ -23,7 +23,7 @@ public class CardSharp : Card, IRegisterable, IHasCustomCardTraits
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
             Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "CardSharp", "name"]).Localize,
-            // Art = ModEntry.Instance.card...
+            Art = helper.Content.Sprites.RegisterSprite(package.PackageRoot.GetRelativeFile("assets/Card/card_sharp.png")).Sprite
         });
     }
     

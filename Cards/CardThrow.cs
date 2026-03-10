@@ -20,7 +20,7 @@ public class CardThrow : Card, IRegisterable
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
             Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "CardThrow", "name"]).Localize,
-            // Art = ModEntry.Instance.card...
+            Art = helper.Content.Sprites.RegisterSprite(package.PackageRoot.GetRelativeFile("assets/Card/card_throw.png")).Sprite
         });
     }
     

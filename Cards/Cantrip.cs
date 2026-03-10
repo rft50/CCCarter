@@ -24,7 +24,7 @@ public class Cantrip : Card, IRegisterable
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
             Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "Cantrip", "name"]).Localize,
-            // Art = ModEntry.Instance.card...
+            Art = helper.Content.Sprites.RegisterSprite(package.PackageRoot.GetRelativeFile("assets/Card/cantrip.png")).Sprite
         });
     }
     

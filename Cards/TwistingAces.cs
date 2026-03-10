@@ -21,7 +21,7 @@ public class TwistingAces : Card
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
             Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "TwistingAces", "name"]).Localize,
-            // Art = ModEntry.Instance.card...
+            Art = helper.Content.Sprites.RegisterSprite(package.PackageRoot.GetRelativeFile("assets/Card/twisting_aces.png")).Sprite
         });
     }
     

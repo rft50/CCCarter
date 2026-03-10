@@ -24,7 +24,7 @@ public class TrickDraw : Card, IRegisterable
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
             Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "TrickDraw", "name"]).Localize,
-            // Art = ModEntry.Instance.card...
+            Art = helper.Content.Sprites.RegisterSprite(package.PackageRoot.GetRelativeFile("assets/Card/trick_draw.png")).Sprite
         });
     }
     

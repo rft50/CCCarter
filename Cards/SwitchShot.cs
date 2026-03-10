@@ -23,7 +23,7 @@ public class SwitchShot : Card, IRegisterable
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
             Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "SwitchShot", "name"]).Localize,
-            // Art = ModEntry.Instance.card...
+            Art = helper.Content.Sprites.RegisterSprite(package.PackageRoot.GetRelativeFile("assets/Card/switch_shot.png")).Sprite
         });
     }
     

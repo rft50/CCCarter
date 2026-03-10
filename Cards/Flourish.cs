@@ -8,10 +8,15 @@ namespace Carter.Cards;
 
 public class Flourish : Card, IRegisterable, IHasCustomCardTraits
 {
-
+    public static Spr left;
+    public static Spr right;
 
     public static void Register(IPluginPackage<IModManifest> package, IModHelper helper)
     {
+        left = helper.Content.Sprites
+            .RegisterSprite(package.PackageRoot.GetRelativeFile("assets/Card/flourish_left.png")).Sprite;
+        right = helper.Content.Sprites
+            .RegisterSprite(package.PackageRoot.GetRelativeFile("assets/Card/flourish_right.png")).Sprite;
         helper.Content.Cards.RegisterCard(new CardConfiguration
         {
             CardType = MethodBase.GetCurrentMethod()!.DeclaringType!,
@@ -22,7 +27,7 @@ public class Flourish : Card, IRegisterable, IHasCustomCardTraits
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
             Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "Flourish", "name"]).Localize,
-            // Art = ModEntry.Instance.card...
+            Art = right
         });
     }
     
@@ -49,7 +54,8 @@ public class Flourish : Card, IRegisterable, IHasCustomCardTraits
         return new CardData
         {
             cost = upgrade == Upgrade.B ? 3 : 2,
-            flippable = true
+            flippable = true,
+            art = flipped ? left : right
         };
     }
     public IReadOnlySet<ICardTraitEntry> GetInnateTraits(State state)

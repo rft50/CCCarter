@@ -8,10 +8,15 @@ namespace Carter.Cards;
 
 public class ShuffleStep : Card, IRegisterable
 {
-
+    public static Spr left;
+    public static Spr right;
 
     public static void Register(IPluginPackage<IModManifest> package, IModHelper helper)
     {
+        left = helper.Content.Sprites
+            .RegisterSprite(package.PackageRoot.GetRelativeFile("assets/Card/shuffle_shot_left.png")).Sprite;
+        right = helper.Content.Sprites
+            .RegisterSprite(package.PackageRoot.GetRelativeFile("assets/Card/shuffle_shot_right.png")).Sprite;
         helper.Content.Cards.RegisterCard(new CardConfiguration
         {
             CardType = MethodBase.GetCurrentMethod()!.DeclaringType!,
@@ -22,7 +27,7 @@ public class ShuffleStep : Card, IRegisterable
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
             Name = ModEntry.Instance.AnyLocalizations.Bind(["card", "ShuffleStep", "name"]).Localize,
-            // Art = ModEntry.Instance.card...
+            Art = left
         });
     }
     
@@ -44,7 +49,8 @@ public class ShuffleStep : Card, IRegisterable
         return new CardData
         {
             cost = 1,
-            flippable = true
+            flippable = true,
+            art = flipped ? right : left
         };
     }
 }
